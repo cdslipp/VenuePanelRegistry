@@ -1,38 +1,17 @@
 <script>
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import io from 'socket.io-client';
-
+	import { showMode, toggleShowMode } from '$lib/websocket';
 	import Locked from '$lib/Locked.svelte';
 	import MainGrid from '$lib/MainGrid.svelte';
 
-	let showMode = false;
-	const socket = io('http://127.0.0.1:4999');
+	let localShowMode = $showMode;
 
-	onMount(() => {
-		socket.on('connect', () => {
-			console.log('Connected to server');
-		});
+	let previousShowMode = localShowMode;
 
-		socket.on('show_mode', (data) => {
-			showMode = data.showMode;
-		});
-
-		return () => {
-			socket.off('show_mode');
-			socket.off('connect');
-		};
-	});
-
-	function toggleShowMode() {
-		socket.emit('toggle_show_mode');
-	}
-
-	let previousShowMode = showMode;
-
-	$: if (showMode !== previousShowMode) {
+	$: if (localShowMode !== previousShowMode) {
 		startTransition();
-		previousShowMode = showMode;
+		previousShowMode = localShowMode;
 	}
 
 	async function startTransition() {
@@ -46,13 +25,15 @@
 			});
 		}
 	}
+
+	$: $showMode;
 </script>
 
 <button on:click={toggleShowMode}>
-	{showMode ? 'Turn Show Mode Off' : 'Turn Show Mode On'}
+	{$showMode ? 'Turn Show Mode Off' : 'Turn Show Mode On'}
 </button>
 
-{#if showMode}
+{#if $showMode}
 	<Locked />
 {:else}
 	<MainGrid />
