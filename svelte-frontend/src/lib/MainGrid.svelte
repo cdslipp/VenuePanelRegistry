@@ -1,29 +1,10 @@
 <script>
-	// import LxSlider from './ui/LxSlider.svelte';
-	import { onMount } from 'svelte';
-	// import { activeSliders } from '$lib/lx/lxStores';
-	// import { fetchLightLevels } from '$lib/lx/lxApi';
-	import { get, writable } from 'svelte/store';
+	import { goto } from '$app/navigation';
+	import { toggleShowMode } from '$lib/websocket';
+	import { showMode } from '$lib/websocket';
 	import Nav from './Nav.svelte';
 
-	const lightLevels = writable({});
 	let isLightsOn = false;
-
-	// onMount(() => {
-	// 	const interval = setInterval(() => {
-	// 		const sliders = get(activeSliders);
-	// 		if (sliders.length > 0) {
-	// 			fetchLightLevels()
-	// 				.then((levels) => {
-	// 					lightLevels.set(levels);
-	// 				})
-	// 				.catch((error) => {
-	// 					console.error('Failed to fetch light levels:', error);
-	// 				});
-	// 		}
-	// 	}, 1000); // Poll every 1 seconds
-	// 	return () => clearInterval(interval);
-	// });
 
 	async function toggleTPLights() {
 		console.log('Turning on!');
@@ -36,14 +17,18 @@
 			console.error('Failed to toggle TP-Link lights:', error);
 		}
 	}
+
+	function navigateToPin() {
+		goto('/pin');
+	}
 </script>
 
 <Nav />
 <section id="main-grid">
-	<button id="showModeButton">
+	<button id="showModeButton" on:click={navigateToPin}>
 		<h2>SHOW MODE</h2>
 	</button>
-	<button class="nav-button">
+	<button class="nav-button" on:click={toggleTPLights}>
 		<div>
 			<h2>{isLightsOn ? 'TURN OFF WORK LIGHTS' : 'TURN ON WORK LIGHTS'}</h2>
 		</div>
@@ -53,7 +38,6 @@
 			<h2>LIGHTING</h2>
 		</div>
 	</a>
-	<!-- <LxSlider lightSetName="house" label="HOUSE LIGHTS" /> -->
 	<a href="/help" id="help-button" class="nav-button">
 		<div>
 			<h2>HELP</h2>
