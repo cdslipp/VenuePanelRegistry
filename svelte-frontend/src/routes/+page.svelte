@@ -3,6 +3,9 @@
 	import { page } from '$app/stores';
 	import io from 'socket.io-client';
 
+	import Locked from '$lib/Locked.svelte';
+	import MainGrid from '$lib/MainGrid.svelte';
+
 	let showMode = false;
 	const socket = io('http://127.0.0.1:4999');
 
@@ -50,7 +53,7 @@
 </button>
 
 {#if showMode}
-	<h2 style="color: red;">SHOW MODE ON!</h2>
+	<Locked />
 {:else}
-	<h2>Main Grid</h2>
+	<MainGrid />
 {/if}
