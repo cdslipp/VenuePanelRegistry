@@ -1,0 +1,8 @@
+version: "3.8"
+
+services:
+  venuepanel:
+    build: .
+    ports:
+      - "4999:4999"
+      - "3000:3000"
