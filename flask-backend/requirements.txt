@@ -2,3 +2,5 @@ Flask==2.1.1
 werkzeug==2.0.3
 flask-cors
 flask-socketio
+requests
+xmljson

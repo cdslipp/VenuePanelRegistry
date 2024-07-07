@@ -36,6 +36,9 @@ RUN pip install -r requirements.txt
 # Copy the Flask application code
 COPY flask-backend .
 
+# Ensure new dimmer control file is copied
+COPY flask-backend/dimmer_control.py .
+
 # Copy the built Svelte app from the previous stage
 COPY --from=svelte-build /app ./
 

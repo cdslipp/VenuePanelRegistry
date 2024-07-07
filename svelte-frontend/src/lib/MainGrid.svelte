@@ -1,22 +1,9 @@
 <script>
 	import { goto } from '$app/navigation';
-	import { toggleShowMode } from '$lib/websocket';
-	import { showMode } from '$lib/websocket';
 	import Nav from './Nav.svelte';
+	import LxSlider from '$lib/ui/LxSlider.svelte';
 
 	let isLightsOn = false;
-
-	async function toggleTPLights() {
-		console.log('Turning on!');
-		try {
-			await fetch('/api/tplight/turnOn', {
-				method: 'POST',
-				body: ''
-			});
-		} catch (error) {
-			console.error('Failed to toggle TP-Link lights:', error);
-		}
-	}
 
 	function navigateToPin() {
 		goto('/pin');
@@ -28,7 +15,7 @@
 	<button id="showModeButton" on:click={navigateToPin}>
 		<h2>SHOW MODE</h2>
 	</button>
-	<button class="nav-button" on:click={toggleTPLights}>
+	<button class="nav-button">
 		<div>
 			<h2>{isLightsOn ? 'TURN OFF WORK LIGHTS' : 'TURN ON WORK LIGHTS'}</h2>
 		</div>
@@ -38,6 +25,7 @@
 			<h2>LIGHTING</h2>
 		</div>
 	</a>
+	<LxSlider lightSetName="house" label="HOUSE LIGHTS" />
 	<a href="/help" id="help-button" class="nav-button">
 		<div>
 			<h2>HELP</h2>
@@ -64,7 +52,7 @@
 	}
 
 	#main-grid a {
-		text-decoration: none; /* Remove default link styling */
+		text-decoration: none;
 	}
 
 	#main-grid a > div {
@@ -75,8 +63,8 @@
 		border-radius: 1.5rem;
 		padding: 0.2rem;
 		position: relative;
-		height: 100%; /* Ensure the div fills the a element for the clickable area */
-		box-sizing: border-box; /* So padding doesn't affect the final size */
+		height: 100%;
+		box-sizing: border-box;
 	}
 
 	#showModeButton {
