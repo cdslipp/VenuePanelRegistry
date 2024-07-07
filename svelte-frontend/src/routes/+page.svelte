@@ -1,19 +1,56 @@
 <script>
 	import { onMount } from 'svelte';
-	let message = '';
+	import { page } from '$app/stores';
+	import io from 'socket.io-client';
 
-	onMount(async () => {
-		const res = await fetch('http://127.0.0.1:4999/api/hello');
-		const data = await res.json();
-		message = data.message;
+	let showMode = false;
+	const socket = io('http://127.0.0.1:4999');
+
+	onMount(() => {
+		socket.on('connect', () => {
+			console.log('Connected to server');
+		});
+
+		socket.on('show_mode', (data) => {
+			showMode = data.showMode;
+		});
+
+		return () => {
+			socket.off('show_mode');
+			socket.off('connect');
+		};
 	});
+
+	function toggleShowMode() {
+		socket.emit('toggle_show_mode');
+	}
+
+	let previousShowMode = showMode;
+
+	$: if (showMode !== previousShowMode) {
+		startTransition();
+		previousShowMode = showMode;
+	}
+
+	async function startTransition() {
+		if (document.startViewTransition) {
+			await new Promise((resolve) => {
+				document.startViewTransition(async () => {
+					// force Svelte to re-render the DOM by invalidating the page store
+					page.set($page);
+					resolve();
+				});
+			});
+		}
+	}
 </script>
 
-<h1>Welcome to SvelteKit</h1>
+<button on:click={toggleShowMode}>
+	{showMode ? 'Turn Show Mode Off' : 'Turn Show Mode On'}
+</button>
 
-{#if message}
-	<p>{message}</p>
+{#if showMode}
+	<h2 style="color: red;">SHOW MODE ON!</h2>
 {:else}
-	<p>Loading...</p>
+	<h2>Main Grid</h2>
 {/if}
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
