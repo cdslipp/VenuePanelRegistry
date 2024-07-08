@@ -4,7 +4,7 @@
 	import { goto } from '$app/navigation';
 
 	let pin = ''; // The current PIN
-	const testPin = '1234'; // Hardcoded test PIN
+	const testPin = '6565'; // Hardcoded test PIN
 
 	function appendToPin(num) {
 		pin += num;
@@ -40,7 +40,7 @@
 <div class="pin-container">
 	<img src="lock.svg" alt="Lock icon" />
 	<div class="pin-display">
-		<h2>Enter pin to unlock</h2>
+		<h2>Enter pin:</h2>
 		<div class="pin-dots">
 			{#each Array(4) as _, i}
 				<span class="dot">{i < pin.length ? '*' : ''}</span>

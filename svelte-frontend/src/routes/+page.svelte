@@ -29,10 +29,6 @@
 	$: $showMode;
 </script>
 
-<button on:click={toggleShowMode}>
-	{$showMode ? 'Turn Show Mode Off' : 'Turn Show Mode On'}
-</button>
-
 {#if $showMode}
 	<Locked />
 {:else}
