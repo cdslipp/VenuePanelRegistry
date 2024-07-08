@@ -5,6 +5,23 @@
 
 	let isLightsOn = false;
 
+	async function toggleWorkLights() {
+		try {
+			const url = isLightsOn ? '/api/tplight/turn_off' : '/api/tplight/turn_on';
+			const response = await fetch(`http://127.0.0.1:4999${url}`, {
+				method: 'POST'
+			});
+			if (response.ok) {
+				isLightsOn = !isLightsOn;
+			} else {
+				const result = await response.json();
+				console.error('Error toggling work lights:', result.error);
+			}
+		} catch (error) {
+			console.error('Error toggling work lights:', error);
+		}
+	}
+
 	function navigateToPin() {
 		goto('/pin');
 	}
@@ -15,7 +32,7 @@
 	<button id="showModeButton" on:click={navigateToPin}>
 		<h2>SHOW MODE</h2>
 	</button>
-	<button class="nav-button">
+	<button class="nav-button" on:click={toggleWorkLights}>
 		<div>
 			<h2>{isLightsOn ? 'TURN OFF WORK LIGHTS' : 'TURN ON WORK LIGHTS'}</h2>
 		</div>

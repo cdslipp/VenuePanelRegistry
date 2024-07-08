@@ -7,6 +7,8 @@ import threading
 import time
 import requests
 import dimmer_control
+import kasa_control
+import asyncio
 
 app = Flask(__name__)
 CORS(app)
@@ -36,6 +38,27 @@ def set_light_level(light_set, level):
 def get_light_level(light_set):
     level = dimmer_control.get_light_level(light_set)
     return jsonify(level=level)
+
+@app.route('/api/tplight/turn_on', methods=['POST'])
+def turn_on_tplight():
+    result = asyncio.run(kasa_control.turn_on_work_lights())
+    if result:
+        return jsonify(error=result), 500
+    return jsonify(success=True)
+
+@app.route('/api/tplight/turn_off', methods=['POST'])
+def turn_off_tplight():
+    result = asyncio.run(kasa_control.turn_off_work_lights())
+    if result:
+        return jsonify(error=result), 500
+    return jsonify(success=True)
+
+@app.route('/api/tplight/state', methods=['GET'])
+def tplight_state():
+    state, error = asyncio.run(kasa_control.get_work_lights_state())
+    if error:
+        return jsonify(error=error), 500
+    return jsonify(is_on=state)
 
 @socketio.on('connect')
 def handle_connect():
