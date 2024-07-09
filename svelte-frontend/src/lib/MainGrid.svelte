@@ -42,7 +42,7 @@
 			<h2>LIGHTING</h2>
 		</div>
 	</a>
-	<LxSlider lightSetName="house" label="HOUSE LIGHTS" />
+	<LxSlider lightSetName="tops" label="HOUSE LIGHTS" />
 	<a href="/help" id="help-button" class="nav-button">
 		<div>
 			<h2>HELP</h2>

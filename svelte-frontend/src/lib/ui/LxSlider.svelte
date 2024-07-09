@@ -51,6 +51,7 @@
 
 			if (response.ok) {
 				console.log(`Light level set to ${level}`);
+				console.log(await response.json());
 			} else {
 				const result = await response.json();
 				throw new Error(result.error || 'An error occurred while setting the light level');
