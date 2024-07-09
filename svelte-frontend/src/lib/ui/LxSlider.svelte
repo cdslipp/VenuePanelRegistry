@@ -11,11 +11,15 @@
 	onMount(() => {
 		socket.on('connect', () => {
 			console.log('Connected to server');
+			// Request the initial light levels
+			socket.emit('request_light_levels');
 		});
 
 		socket.on('light_levels', (data) => {
+			console.log(`Received light levels: ${JSON.stringify(data)}`);
 			if (data[lightSetName] !== undefined) {
 				percentage = data[lightSetName];
+				console.log(`Updated percentage for ${lightSetName}: ${percentage}`);
 			}
 		});
 
@@ -34,6 +38,7 @@
 			currentIndex += 1;
 		}
 		const newLevel = levels[currentIndex];
+		console.log(`Cycling light level to ${newLevel}`);
 		updateLightLevel(newLevel);
 	}
 
